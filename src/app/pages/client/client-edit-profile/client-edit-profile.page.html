@@ -1,0 +1,57 @@
+<ion-content class="edit-profile-wrapper" [fullscreen]="true">
+  <div class="shimmer-loader" *ngIf="isLoading"></div>
+
+  <div class="edit-profile-container" *ngIf="!isLoading">
+    <button class="back-btn" (click)="goBack()">
+      <img src="assets/icons/back.svg" alt="Back" />
+    </button>
+
+    <h1 class="title">Edit Profile</h1>
+
+    <div class="profile-image-wrapper">
+      <img class="profile-image" src="assets/images/profile.jpg" alt="Profile" />
+      <button class="edit-photo-btn">
+        <img src="assets/icons/edit.svg" alt="Edit" />
+      </button>
+    </div>
+
+    <h2 class="name">Shevon Perera</h2>
+    <button class="change-password-btn">Change Password</button>
+
+    <form class="form-fields">
+      <div class="field-group">
+        <label>First Name</label>
+        <div class="input-with-icon">
+          <input type="text" placeholder="Shevon" />
+          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Last Name</label>
+        <div class="input-with-icon">
+          <input type="text" placeholder="Perera" />
+          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Location</label>
+        <div class="input-with-icon">
+          <input type="text" placeholder="Sri Lanka" />
+          <img *ngIf="showCheckmark" src="assets/icons/chevron-down.svg" alt="Dropdown" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Mobile Number</label>
+        <div class="input-with-icon">
+          <input type="text" placeholder="+94 78-332-5298" />
+          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
+        </div>
+      </div>
+    </form>
+
+    <button class="update-btn">Update Profile</button>
+  </div>
+</ion-content>

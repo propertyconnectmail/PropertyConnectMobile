@@ -1,0 +1,191 @@
+<ion-content class="appointment-detail-screen" fullscreen>
+  <!-- Shimmer Loading Wrapper -->
+  <div class="shimmer-loader" *ngIf="isLoading"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <button class="back-button">
+      <img src="assets/icons/back.svg" alt="Back" />
+    </button>
+    <h1>Lawyer Detail</h1>
+  </div>
+
+  <!-- Lawyer Image and Info -->
+  <div class="lawyer-info">
+    <img src="assets/images/lawyer.jpg" alt="Lawyer" class="lawyer-img" />
+    <h2>Janaka Perera</h2>
+    <p>Lawyer - Consultation</p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="actions-card card">
+    <button *ngFor="let action of ['Call', 'Message', 'Schedule', 'Detail']" class="action-btn">
+      <img [src]="'assets/icons/' + action.toLowerCase() + '.svg'" />
+      <span>{{ action }}</span>
+    </button>
+  </div>
+
+  <!-- Meeting Link -->
+  <div class="meeting-link">
+    <h3>Meeting Link</h3>
+    <a href="https://zoom.us/24afgjasasd" target="_blank">https://zoom.us/24afgjasasd</a>
+  </div>
+
+  <!-- Client Details Card -->
+  <div class="card client-details-card">
+    <div class="left">
+      <h4>Client Details</h4>
+      <span class="status">Upcoming</span>
+      <p class="client-name">John Doe</p>
+      <p class="client-info">john.com</p>
+      <p class="client-info">+1 234 567 890</p>
+      <p class="client-date">12 Nov, 2024 • 09:00 am</p>
+    </div>
+    <div class="right">
+      <img src="assets/images/client.jpg" class="client-image" />
+    </div>
+  </div>
+
+  <!-- Appointment Checklist Card -->
+  <div class="card checklist-card">
+    <h4>Appointment Checklist</h4>
+    <div *ngFor="let item of checklist" class="checklist-item">
+      <img src="assets/icons/{{item.icon}}" />
+      <div class="text">
+        <p>{{ item.title }}</p>
+        <span>{{ item.duration }}</span>
+      </div>
+      <button class="arrow-btn">
+        <img src="assets/icons/arrow-right.svg" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Guidelines Card -->
+  <div class="card guidelines-card">
+    <h4>Guidelines for Clients</h4>
+    <div class="guideline" *ngFor="let g of guidelines; let i = index">
+      <span class="number">{{ i + 1 }}</span>
+      <p>{{ g }}</p>
+    </div>
+  </div>
+
+  <!-- Uploaded Documents (With Files) -->
+  <div class="card uploaded-docs" *ngIf="hasDocuments">
+    <h4>Uploaded Documents</h4>
+    <div class="docs">
+      <img *ngFor="let doc of uploadedDocs" [src]="doc.img" class="doc-img" />
+    </div>
+    <button class="upload-btn">Upload Documents</button>
+  </div>
+
+  <!-- Uploaded Documents (Empty) -->
+  <div class="card no-docs" *ngIf="!hasDocuments">
+    <h4>Uploaded Documents</h4>
+    <img src="assets/images/empty-docs.png" alt="No Docs" />
+    <p>No Documents Uploaded Yet</p>
+    <button class="upload-btn">Upload Documents</button>
+  </div>
+</ion-content>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+<ion-content class="appointment-details" [fullscreen]="true">
+  <div class="shimmer" *ngIf="isLoading"></div>
+
+  <div class="content" *ngIf="!isLoading">
+    <div class="header">
+      <button class="back-btn" (click)="goBack()">
+        <img src="assets/icons/back.svg" alt="Back" />
+      </button>
+      <h1>Lawyer Detail</h1>
+    </div>
+
+    <div class="profile">
+      <img class="lawyer-img" src="assets/images/lawyer.jpg" alt="Lawyer Image" />
+      <h2 class="name">Janaka Perera</h2>
+      <p class="role">Lawyer - Consultation</p>
+    </div>
+
+    <div class="action-buttons card">
+      <div class="button" *ngFor="let btn of actionButtons">
+        <img [src]="btn.icon" [alt]="btn.label" />
+        <span>{{ btn.label }}</span>
+      </div>
+    </div>
+
+    <div class="meeting-link card">
+      <h3>Meeting Link</h3>
+      <a href="https://zoom.us/24afgjasasd" target="_blank">https://zoom.us/24afgjasasd</a>
+    </div>
+
+    <div class="client-details card">
+      <div class="details">
+        <div class="status">{{ appointment.status }}</div>
+        <h4>{{ appointment.clientName }}</h4>
+        <p>{{ appointment.clientEmail }}</p>
+        <p>{{ appointment.clientPhone }}</p>
+        <div class="datetime">
+          <img src="assets/icons/calendar.svg" />
+          <span>{{ appointment.date }} · {{ appointment.time }}</span>
+        </div>
+      </div>
+      <img class="client-img" src="assets/images/client.jpg" alt="Client" />
+    </div>
+
+    <div class="checklist card">
+      <h3>Appointment Checklist</h3>
+      <div class="item" *ngFor="let item of checklist">
+        <div class="icon"><img [src]="item.icon" /></div>
+        <div class="text">
+          <strong>{{ item.title }}</strong>
+          <span>{{ item.duration }}</span>
+        </div>
+        <button class="arrow"><img src="assets/icons/arrow-right.svg" /></button>
+      </div>
+    </div>
+
+    <div class="guidelines card">
+      <h3>Guidelines for patients</h3>
+      <div class="item" *ngFor="let rule of guidelines; index as i">
+        <span class="number">{{ i + 1 }}</span>
+        <p>{{ rule }}</p>
+      </div>
+    </div>
+
+    <div class="uploaded-docs">
+      <h3>Uploaded Documents</h3>
+      <div class="card" *ngIf="documents.length; else noDocs">
+        <div class="doc" *ngFor="let doc of documents">
+          <img [src]="doc.icon" />
+          <span>{{ doc.name }}</span>
+        </div>
+        <button class="upload-btn">Upload Documents</button>
+      </div>
+
+      <ng-template #noDocs>
+        <div class="card empty">
+          <img src="assets/images/empty-upload.png" />
+          <p>No Documents Uploaded Yet</p>
+          <button class="upload-btn">Upload Documents</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ion-content> -->

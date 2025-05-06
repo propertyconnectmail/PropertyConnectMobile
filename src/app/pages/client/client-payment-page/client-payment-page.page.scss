@@ -1,0 +1,225 @@
+.payment-content {
+    --background: #F9FAFB;
+    padding: 16px;
+    font-family: 'Manrope', sans-serif;
+  }
+  
+  .transparent-header {
+    --background: transparent;
+    ion-toolbar {
+      background: transparent;
+    }
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    margin-top: 8px;
+  
+    h1 {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(18px, 4vw, 22px);
+      color: #111928;
+      font-weight: 700;
+    }
+  
+    .back-button {
+      background: #fff;
+      border-radius: 50%;
+      padding: 10px;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  .lawyer-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  
+    .lawyer-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  
+    .lawyer-info {
+      flex: 1;
+      h2 {
+        font-size: clamp(16px, 4vw, 18px);
+        color: #111928;
+        margin: 0;
+        font-weight: 600;
+      }
+      p {
+        font-size: clamp(12px, 3vw, 14px);
+        color: #6B7280;
+        margin: 4px 0 8px 0;
+      }
+      .lawyer-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        .appointment-btn {
+          background: #E0F2FE;
+          color: #0EA5E9;
+          font-weight: 500;
+          border: none;
+          padding: 4px 8px;
+          border-radius: 6px;
+          font-size: clamp(10px, 2vw, 12px);
+        }
+        .price-tag {
+          background: #0EA5E9;
+          color: white;
+          font-weight: 600;
+          padding: 4px 8px;
+          border-radius: 6px;
+          font-size: clamp(10px, 2vw, 12px);
+        }
+      }
+    }
+  }
+  
+  .cards-section {
+    margin-top: 24px;
+  
+    .cards-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      p {
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 600;
+        color: #111928;
+      }
+      .card-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+  
+      .card-item {
+        background: #fff;
+        border-radius: 16px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        transition: transform 0.2s ease, background 0.2s ease;
+  
+        &:active {
+          transform: scale(0.98);
+        }
+  
+        &.selected {
+          background: #E0F2FE;
+        }
+  
+        .card-left {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+  
+          p {
+            font-size: clamp(14px, 4vw, 16px);
+            color: #111928;
+            font-weight: 500;
+  
+            span {
+              margin-left: 6px;
+              font-weight: 400;
+              color: #6B7280;
+            }
+          }
+  
+          .card-icon {
+            width: 32px;
+            height: 32px;
+          }
+        }
+  
+        .card-right {
+          .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0EA5E9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+  
+            .inner-circle {
+              width: 10px;
+              height: 10px;
+              background: #0EA5E9;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .payment-footer {
+    padding: 16px;
+    background: #F9FAFB;
+    position: sticky;
+    bottom: 0;
+    button.payment-btn {
+      width: 100%;
+      background: #0EA5E9;
+      color: white;
+      font-weight: 600;
+      padding: 14px 0;
+      border-radius: 12px;
+      font-size: clamp(16px, 4vw, 18px);
+      transition: background 0.3s;
+  
+      &:active {
+        background: #0284C7;
+      }
+    }
+  }
+  
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 0%,
+      #e0e0e0 50%,
+      #f0f0f0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmerMove 1.5s infinite;
+    height: 70px;
+    border-radius: 16px;
+  }
+  
+  @keyframes shimmerMove {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  

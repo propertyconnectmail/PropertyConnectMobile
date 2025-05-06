@@ -1,0 +1,65 @@
+<ion-content class="login-content" [fullscreen]="true">
+  <div class="login-wrapper">
+
+    <h1 class="title">Welcome Back</h1>
+    <p class="subtitle">Sign in to access your personalized experience</p>
+
+    <div class="form-group">
+      <label for="email" class="input-label">Email Address</label>
+      <ion-item class="input-wrapper" lines="none">
+        <ion-input
+          id="email"
+          name="email"
+          type="email"
+          inputmode="email"
+          placeholder="Email address"
+          fill="solid"
+        ></ion-input>
+      </ion-item>
+
+      <label for="password" class="input-label">Password</label>
+      <ion-item class="input-wrapper password-field" lines="none">
+        <ion-input
+          id="password"
+          name="password"
+          type="password"
+          inputmode="text"
+          placeholder="***************"
+          fill="solid"
+        ></ion-input>
+        <img src="../../../assets/icon/Eye.svg" alt="Eye" class="social-icon" />
+      </ion-item>
+    </div>
+
+    <div class="options-row">
+      <ion-checkbox slot="start" class="remember-checkbox"></ion-checkbox>
+      <span class="remember-text">Remember Me</span>
+      <a class="forgot-password" href="#">Forgot Password?</a>
+    </div>
+
+    <ion-button expand="block" class="login-btn">Login</ion-button>
+
+    <div class="divider">or continue with</div>
+
+    <div class="social-buttons">
+      <div class="social">
+        <img src="../../../assets/icon/Google.svg" alt="Google" class="social-icon" />
+        <span>Continue With Google</span>
+      </div>
+
+      <div class="social">
+        <img src="../../../assets/icon/Apple.svg" alt="Apple" class="social-icon" />
+        <span>Continue With Apple</span>
+      </div>
+
+      <div class="social">
+        <img src="../../../assets/icon/Facebook.svg" alt="Facebook" class="social-icon" />
+        <span>Continue With Facebook</span>
+      </div>
+    </div>
+
+    <p class="signup-text">
+      Don’t have an account? <a href="#">Sign Up now</a>
+    </p>
+  </div>
+</ion-content>

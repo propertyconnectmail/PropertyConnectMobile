@@ -1,0 +1,174 @@
+.edit-profile-wrapper {
+    --background: #f9fafb;
+  
+    .edit-profile-container {
+      padding: clamp(16px, 5vw, 32px);
+      font-family: 'Manrope', sans-serif;
+      color: #1f2937;
+    }
+  
+    .shimmer-loader {
+      height: 100vh;
+      width: 100%;
+      background: linear-gradient(
+        to right,
+        #f0f0f0 8%,
+        #e0e0e0 18%,
+        #f0f0f0 33%
+      );
+      background-size: 1200px 100%;
+      animation: shimmer 1.8s infinite linear;
+    }
+  
+    @keyframes shimmer {
+      0% {
+        background-position: -1200px 0;
+      }
+      100% {
+        background-position: 1200px 0;
+      }
+    }
+  
+    .back-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-bottom: clamp(12px, 3vw, 24px);
+  
+      img {
+        width: clamp(24px, 6vw, 32px);
+        height: auto;
+      }
+    }
+  
+    .title {
+      text-align: center;
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 600;
+      margin-bottom: clamp(16px, 4vw, 24px);
+    }
+  
+    .profile-image-wrapper {
+      position: relative;
+      margin: 0 auto clamp(12px, 4vw, 24px);
+      width: clamp(100px, 28vw, 140px);
+      height: clamp(100px, 28vw, 140px);
+  
+      .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+  
+      .edit-photo-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: #ffffff;
+        border: 2px solid #d1d5db;
+        border-radius: 50%;
+        padding: 4px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        img {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  
+    .name {
+      text-align: center;
+      font-size: clamp(18px, 4vw, 24px);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+  
+    .change-password-btn {
+      display: block;
+      margin: 0 auto clamp(24px, 5vw, 32px);
+      background: none;
+      border: none;
+      color: #3b82f6;
+      font-size: clamp(14px, 3.5vw, 16px);
+      font-weight: 500;
+    }
+  
+    .form-fields {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 4vw, 24px);
+    }
+  
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  
+      label {
+        font-size: clamp(14px, 3vw, 16px);
+        font-weight: 500;
+      }
+  
+      .input-with-icon {
+        background-color: #f3f4f6;
+        border-radius: 12px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+  
+        input {
+          flex: 1;
+          border: none;
+          outline: none;
+          font-size: clamp(14px, 3.5vw, 16px);
+          background: transparent;
+          font-family: 'Manrope', sans-serif;
+  
+          &:focus {
+            background-color: #e5e7eb;
+          }
+        }
+  
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  
+    .update-btn {
+      margin: clamp(24px, 5vw, 40px) auto 0;
+      width: 100%;
+      max-width: 320px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1.5px solid #3b82f6;
+      background-color: transparent;
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: clamp(14px, 3.5vw, 16px);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+
+        &:active {
+            transform: scale(0.95);
+            background-color: #dbeafe;
+        }
+    }
+  
+    ion-content {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+  
+    ion-content::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  

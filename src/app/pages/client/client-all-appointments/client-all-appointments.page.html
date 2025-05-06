@@ -1,0 +1,71 @@
+<ion-header class="custom-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" icon="chevron-back-outline" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>All Appointments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <img src="assets/icons/search.svg" alt="Search" class="search-icon" />
+    <input type="text" placeholder="Search by name or role" />
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <div 
+      class="tab" 
+      [class.active]="selectedTab === 'canceled'" 
+      (click)="selectTab('canceled')">
+      Canceled Appointments
+    </div>
+    <div 
+      class="tab" 
+      [class.active]="selectedTab === 'upcoming'" 
+      (click)="selectTab('upcoming')">
+      Upcoming Appointments
+    </div>
+    <div 
+      class="tab" 
+      [class.active]="selectedTab === 'completed'" 
+      (click)="selectTab('completed')">
+      Completed Appointments
+    </div>
+  </div>
+
+  <!-- Skeleton Shimmer Loader -->
+  <div *ngIf="isLoading" class="appointments-list shimmer">
+    <div class="appointment-card shimmer-card" *ngFor="let skeleton of skeletonArray"></div>
+  </div>
+
+  <!-- Real Appointment Cards -->
+  <div *ngIf="!isLoading" class="appointments-list">
+    <div class="appointment-card" *ngFor="let appointment of appointments">
+      <div class="profile-section">
+        <img src="assets/imgs/doctor1.png" alt="Doctor" class="profile-img" />
+        <div class="profile-info">
+          <h2>{{ appointment.name }}</h2>
+          <p>{{ appointment.role }}</p>
+        </div>
+      </div>
+      <div class="appointment-details">
+        <div class="detail-item">
+          <img src="assets/icons/calendar.svg" alt="Calendar" />
+          <span>{{ appointment.date }}</span>
+        </div>
+        <div class="detail-item">
+          <img src="assets/icons/clock.svg" alt="Clock" />
+          <span>{{ appointment.time }}</span>
+        </div>
+      </div>
+      <div class="detail-button">
+        Detail
+      </div>
+    </div>
+  </div>
+
+</ion-content>

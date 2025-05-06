@@ -1,0 +1,56 @@
+<ion-content [fullscreen]="true" class="profile-content">
+  <div *ngIf="loading" class="profile-skeleton shimmer"></div>
+
+  <div *ngIf="!loading" class="profile-container">
+    <h2 class="title">Profile</h2>
+
+    <div class="profile-header">
+      <img class="profile-image" src="assets/images/user.jpg" alt="User Photo" />
+      <h3 class="username">Shevon Perera</h3>
+      <p class="phone">+98-332-32-23</p>
+    </div>
+
+    <div class="settings-list">
+      <div class="setting-item" *ngFor="let item of profileOptions" (click)="onOptionClick(item)">
+        <img [src]="item.icon" class="item-icon" alt="Icon" />
+        <span class="item-label">{{ item.label }}</span>
+        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+      </div>
+    </div>
+
+    <button class="logout-button" (click)="onLogout()">
+      <img src="assets/icons/logout.svg" alt="Logout Icon" />
+      Log Out
+    </button>
+  </div>
+</ion-content>
+
+
+
+
+<!-- <ion-content class="profile-container" fullscreen [scrollY]="true">
+  <div *ngIf="isLoading" class="shimmer-loader"></div>
+
+  <div *ngIf="!isLoading" class="profile-content">
+    <h1 class="title">Profile</h1>
+
+    <div class="avatar-wrapper">
+      <img [src]="user.profileImage" alt="Profile Image" class="avatar" />
+      <h2 class="name">{{ user.name }}</h2>
+      <p class="phone">{{ user.phone }}</p>
+    </div>
+
+    <div class="settings-card" *ngFor="let item of profileItems" (click)="navigateTo(item.route)">
+      <div class="icon-text">
+        <img [src]="item.icon" alt="{{ item.label }} icon" class="item-icon" />
+        <span class="label">{{ item.label }}</span>
+      </div>
+      <img src="assets/icons/arrow-right.svg" class="arrow-icon" />
+    </div>
+
+    <div class="logout-button" (click)="logout()">
+      <img src="assets/icons/logout.svg" class="logout-icon" />
+      <span>Log Out</span>
+    </div>
+  </div>
+</ion-content> -->
