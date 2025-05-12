@@ -37,6 +37,10 @@ $font: 'Manrope', sans-serif;
   font-weight: 600;
   font-size: clamp(0.9rem, 1.8vw, 1rem);
   color: #374151; // Gray-700
+
+  span {
+    color: red;
+  }
 }
 
 

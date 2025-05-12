@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonContent, IonCheckbox } from '@ionic/angular/standalone';
-import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { AbstractControl, ValidationErrors, Validators, FormGroup, FormBuilder, ValidatorFn } from '@angular/forms';
+import { AuthService } from 'src/app/core/_services/auth/auth.service';
+import { NavController } from '@ionic/angular';
+import { ToastService } from 'src/app/core/_services/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -15,79 +16,86 @@ import { Location } from '@angular/common';
 })
 export class LoginPage implements OnInit {
   loginForm: FormGroup | any;
-  loading = true;
   showPassword = false;
   rememberMe = false;
   isSubmitting = false;
 
-  constructor(private fb: FormBuilder, private router: Router, private location : Location) {}
+  constructor(private fb: FormBuilder, private navCtrl: NavController, private toastService : ToastService, private authService: AuthService) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1200); // simulate shimmer
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      rememberMe: [false]
     });
-  }
-
-  get email() {
-    return this.loginForm.get('email');
-  }
-
-  get password() {
-    return this.loginForm.get('password');
   }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  onLogin() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      setTimeout(() => {
-        this.isSubmitting = true;
-        // Proceed with login request or call your API
-      }, 200);
-      // Simulate API delay
-      setTimeout(() => {
-        console.log('Login data:', this.loginForm.value);
-        this.isSubmitting = false;
-      }, 1500);
-    } else {
-      this.email?.markAsTouched();
-      this.password?.markAsTouched();
+  onLogin(): void {
+    if (this.loginForm.invalid){
+      this.loginForm.markAllAsTouched();
+      this.toastService.show('Please enter your email and password!', {
+        color: 'danger',
+        position: 'bottom',
+        duration: 3000
+      });
+      return;
+    }
+
+    if(this.loginForm.valid){
+      const {rememberMe, ...rest } = this.loginForm.value;
+
+      let client: any = {
+        ...rest,
+      };
+
+      this.isSubmitting = true;
+      
+      this.authService.loginClient(client).subscribe(async(res:any) => {
+        if(res.email === client.email){
+          this.isSubmitting = false;        
+            this.toastService.show('Login successful!', {
+              color: 'primary',
+              position: 'bottom',
+              duration: 3000
+            });
+          this.navCtrl.navigateRoot(['/client-home'])
+        }
+        if(res.Error === 'Email or Password is Incorrect'){
+          console.log(res.Error)
+              this.isSubmitting = false;
+              this.toastService.show('Email or Password is Incorrect!', {
+                color: 'danger',
+                position: 'bottom',
+                duration: 3000
+              });
+              return
+        }
+        if(res.email != client.email){
+          this.isSubmitting = false;
+          this.toastService.show('Something went wrong. Please try again Later!', {
+            color: 'danger',
+            position: 'bottom',
+            duration: 3000
+          });
+          return
+        }
+      })
     }
   }
 
-  prev(){
-    this.location.back();
+  // prev(){
+  //   this.navCtrl.navigateBack('/onboarding-client');
+  // }
+
+  toRegistration(){
+    this.navCtrl.navigateForward('/register');
   }
 
+  toProfessionaLogin(){
+    this.navCtrl.navigateForward('/login-professional');
+  }
 }
-
-
-// onLogin() {
-//   if(this.loginForm.valid){
-//     setTimeout(() => {
-//       this.isSubmitting = true;
-//       // Proceed with login request or call your API
-//     }, 200);
-//     if (this.loginForm.valid) {
-//       console.log(this.loginForm.value);
-//     } else {
-//       this.email?.markAsTouched();
-//       this.password?.markAsTouched();
-//     }
-
-//     // Simulate API delay
-//     setTimeout(() => {
-//       console.log('Login data:', this.loginForm.value);
-//       this.isSubmitting = false;
-//     }, 1500);
-//   }else {
-
-//   }
-// }

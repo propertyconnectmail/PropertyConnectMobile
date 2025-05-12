@@ -1,8 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { IonContent, IonImg } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-onboarding-client',
@@ -14,7 +13,7 @@ import { Location } from '@angular/common';
 })
 export class OnboardingClientPage {
 
-  constructor(private router: Router, private location : Location) {}
+  constructor(private navCtrl: NavController) {}
   animationClass = '';
   isAnimating = false;
   currentIndex = 1;
@@ -63,19 +62,13 @@ export class OnboardingClientPage {
   }
 
   prev(){
-    this.location.back();
-    if (this.isAnimating || this.currentIndex <= 1) return;
 
-    this.animationClass = 'fade-leave-right';
-    this.isAnimating = true;
+    this.navCtrl.navigateBack('/selection');
+  }
 
-    setTimeout(() => {
-      this.animationClass = 'fade-enter-left';
 
-      setTimeout(() => {
-        this.isAnimating = false;
-        this.animationClass = '';
-      }, 400);
-    }, 400);
+  toLogin(){
+    this.navCtrl.navigateForward('/login');
+    localStorage.setItem('firstLaunchDone', 'true');
   }
 }

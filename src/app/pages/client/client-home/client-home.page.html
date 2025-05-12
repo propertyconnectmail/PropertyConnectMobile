@@ -1,121 +1,113 @@
+  
+  <div *ngIf="loading" class="shimmer-container">
+    <div class="shimmer-card" *ngFor="let item of [1,2,3,4,5,6]"></div>
+</div>
   <ion-content class="client-home">
 
-  <!-- Header -->
-  <div class="header">
-    <img src="../../../../assets/Hamburger.svg" alt="Menu" class="icon" />
-    <h1><span class="bold">Propery</span><span class="highlight">Connect</span></h1>
-  </div>
-
-  <!-- Search bar -->
-  <div class="search-container">
-    <img src="../../../../assets/search.svg" class="search-icon" alt="Search" />
-    <input type="text" placeholder="Looking for consultation" />
-    <img src="../../../../assets/filter.svg" class="filter-icon" alt="Filter" />
-  </div>
-
-  <!-- Reminder -->
-  <div class="section-title">Reminder</div>
-  <p class="section-desc">Check your notifications for upcoming appointments</p>
-
-  <div class="reminder-card">
-    <div class="info">
-      <h2>Amit Mitra</h2>
-      <p class="role">Valuer</p>
-      <div class="rating">
-        <img src="../../../../assets/reminder star.png" />
-        <span>4.78 out of 5</span>
+    <div class="client-home-wrapper">
+      <!-- Header -->
+      <div class="header">
+        <!-- <img src="assets/logo/logo.svg" alt="Logo" class="icon" /> -->
+        <h1 class="title">
+          <span class="bold">Property</span><span class="highlight">Connect</span>
+        </h1>
       </div>
-      <div class="date-time">
-        <div>
-          <img src="../../../../assets/date.svg" />
-          <span>Monday, Dec 23</span>
+
+
+      <!-- Reminder -->
+      <div class="section-title" *ngIf="appointment && !loading">Reminder</div>
+
+      <div class="reminder-card" *ngIf="appointment && !loading">
+        <!-- Top Row: Name + Role & Image -->
+        <div class="top-row">
+          <div class="info">
+            <h2>{{appointment.professionalName}}</h2>
+            <p class="role">{{professional.type}}</p>
+          </div>
+          <img [src]="appointment.professionalUrl" alt="Amit Mitra" class="profile-img" />
         </div>
-        <div>
-          <img src="../../../../assets/time.svg" />
-          <span>12:00–13:00</span>
+
+        <!-- Middle Row: Date & Time -->
+        <div class="date-time-row">
+          <div class="date-time-item">
+            <img src="assets/appointment/date-white.svg" />
+            <span>{{appointment.appointmentDate}}</span>
+          </div>
+          <div class="date-time-item">
+            <img src="assets/appointment/time-white.svg" />
+            <span>{{appointment.appointmentTime}}</span>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="action-buttons">
+          <button class="reschedule" (click)="goToAppointment()">View Appointment</button>
+        </div>
+      </div>
+
+
+      <div class="section-row" *ngIf="!loading">
+        <div class="section-title">Popular Consultants</div>
+        <div class="see-all" (click)="toBrowse()">See all</div>
+      </div>
+
+
+      <div class="horizontal-scroll" *ngIf="!loading">
+        <div class="consultant-card" *ngFor="let consultant of consultants" (click)="toProfessionalProfile(consultant.email)">
+          <div class="image-wrapper">
+            <img [src]="consultant.url" alt="Consultant Photo" />
+          </div>
+          <h3>{{ consultant.firstName }} {{ consultant.lastName }}</h3>
+          <div class="role">{{ consultant.type | titlecase }}</div>
+          <div class="rating">
+            <img src="assets/star-filled.svg" alt="Star" />
+            {{ consultant.averageRating }}
+            <span class="fee">(LKR {{ consultant.consultationFee }})</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Official Officers -->
+      <div class="section-row" *ngIf="!loading">
+        <div class="section-title">Area Officials</div>
+        <div class="see-all" (click)="toOfficialBrowse()">See all</div>
+      </div>
+
+      <div class="horizontal-scroll" *ngIf="!loading">
+        <div class="consultant-card" *ngFor="let official of officials" (click)="toOfficialProfile(official.id)">
+          <div class="image-wrapper">
+            <img src="assets/official/profile-image.svg" alt="Official Photo" />
+          </div>
+          <h3>{{ official.firstName }} {{ official.lastName }}</h3>
+          <div class="role" style="margin-top: 5%;">{{ official.type | customTitlecase  }}</div>
+          <div class="location">
+            {{ official.district }}, {{ official.province }}
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Official Officers -->
+      <div class="section-row" *ngIf="!loading">
+        <div class="section-title">Land Registry Locations</div>
+        <div class="see-all" (click)="toRegistryBrowse()">See all</div>
+      </div>
+
+      <div class="horizontal-scroll" *ngIf="!loading" style="margin-bottom: 22vw;">
+        <div class="consultant-card" style="width: 65vw;" *ngFor="let registry of registries" (click)="toRegistryProfile(registry.locationName)">
+          <div class="image-wrapper">
+            <img src="assets/land/registryPicture.svg" alt="Official Photo" />
+          </div>
+          <h3>{{ registry.locationName }}</h3>
+          <div class="role" style="margin-top: 5%;">{{ registry.contactNumber }}</div>
+          <div class="location">
+            {{ registry.district }}, {{ registry.province }}
+          </div>
         </div>
       </div>
     </div>
-    <img src="../../../../assets/amitra.png" alt="Amit Mitra" class="profile-img" />
-    <div class="action-buttons">
-      <button class="reschedule">Reschedule</button>
-      <button class="cancel">Cancel</button>
-    </div>
-  </div>
 
-  <!-- Category -->
-  <div class="section-title">Category</div>
-  <div class="category-scroll">
-    <div class="category-item" *ngFor="let cat of categories">
-      <img [src]="cat.image" />
-      <p>{{ cat.name }}</p>
-    </div>
-  </div>
-
-  <!-- All Lawyers -->
-  <div class="section-row">
-    <div class="section-title">All Lawyers</div>
-    <div class="see-all">See all</div>
-  </div>
-
-  <div class="horizontal-scroll">
-    <div class="profile-card" *ngFor="let lawyer of lawyers">
-      <div class="card-image-wrapper">
-        <img [src]="lawyer.image" />
-        <span class="status-dot"></span>
-      </div>
-      <h3>{{ lawyer.name }}</h3>
-      <p class="role">Lawyer</p>
-      <div class="card-rating">
-        <img src="assets/icons/star.svg" />
-        <span><img src="../../../../assets/reminder star.png" />{{ lawyer.rating }} ({{ lawyer.reviews }} reviews)</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Popular Consultants -->
-  <div class="section-row">
-    <div class="section-title">Popular Consultants</div>
-    <div class="see-all">See all</div>
-  </div>
-
-  <div class="horizontal-scroll">
-    <div class="profile-card" *ngFor="let consultant of consultants">
-      <div class="card-image-wrapper">
-        <img [src]="consultant.image" />
-        <span class="status-dot"></span>
-      </div>
-      <h3>{{ consultant.name }}</h3>
-      <p class="role">Lawyer</p>
-      <div class="card-rating">
-        <img src="assets/icons/star.svg" />
-        <span><img src="../../../../assets/reminder star.png" />{{ consultant.rating }} ({{ consultant.reviews }} reviews)</span>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="bottom-menu">
-    <div class="menu-item active">
-      <img src="../../../../assets/icon/HomeIcon.svg" alt="Home" />
-      <span>Home</span>
-    </div>
-    <div class="menu-item">
-      <img src="../../../../assets/icon/SearchIcon.svg" alt="Browse" />
-      <span>Consult</span>
-    </div>
-    <div class="menu-item">
-      <img src="../../../../assets/icon/AppointmentIcon.svg" alt="Appointments" />
-      <span>Messages</span>
-    </div>
-    <div class="menu-item">
-      <img src="../../../../assets/icon/NotificationIcon.svg" alt="Notifications" />
-      <span>Alerts</span>
-    </div>
-    <div class="menu-item">
-      <img src="../../../../assets/icon/ProfileIcon.svg" alt="Profile" />
-      <span>Profile</span>
-    </div>
-  </div>
+<app-bottom-tab></app-bottom-tab>
 
 </ion-content>

@@ -29,6 +29,20 @@
 @import './theme/helpers';
 
 
+ion-content {
+  --overflow: auto; /* ensures scroll still works */
+  scrollbar-width: none; /* Firefox */
+}
+
+ion-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+ion-content {
+  -webkit-overflow-scrolling: touch;
+}
+
+
 // input {
 //     @include input-style();
 // }

@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonFooter, IonButton, IonButtons, IonBackButton, IonIcon } from '@ionic/angular/standalone';
+import { IonContent} from '@ionic/angular/standalone';
+import { ProfessionalService } from 'src/app/_services/professional/professional.service';
+import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { ToastService } from 'src/app/core/_services/toast/toast.service';
 
 @Component({
   selector: 'app-client-set-appointment-date',
   templateUrl: './client-set-appointment-date.page.html',
   styleUrls: ['./client-set-appointment-date.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonBackButton, IonButtons, IonButton, IonFooter, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [ IonContent, CommonModule, FormsModule]
 })
 export class ClientSetAppointmentDatePage {
 
@@ -46,8 +50,41 @@ export class ClientSetAppointmentDatePage {
     { time: '08:00 pm', disabled: false },
   ];
 
-  ngOnInit() {
+  constructor(private professionalService: ProfessionalService,private navCtrl: NavController,private route: ActivatedRoute, private toastService : ToastService){}
+
+  lawyer: any = {};
+
+  ngOnInit(): void {
+    const email = this.route.snapshot.queryParamMap.get('email');
+    if (email) {
+      localStorage.setItem('selectedLawyerEmail', email);
+      this.professionalService.getProfessionalForm({ email : email }).subscribe((res: any) => {
+        this.lawyer = res;
+      });
+    }
+    
     this.generateDates();
+  }
+
+
+  ionViewWillEnter() {
+    const storedDate = localStorage.getItem('selectedDate');
+    const storedSlot = localStorage.getItem('selectedSlot');
+
+    if (storedDate) {
+      this.selectedDate = JSON.parse(storedDate);
+    }
+
+    if (storedSlot) {
+      this.selectedSlot = { time: storedSlot };
+    }
+  }
+
+
+  ngOnDestroy(): void {
+    localStorage.removeItem('selectedDate');
+    localStorage.removeItem('selectedSlot');
+    localStorage.removeItem('selectedLawyerEmail');
   }
 
   generateDates() {
@@ -70,7 +107,6 @@ export class ClientSetAppointmentDatePage {
 
     setTimeout(() => {
       const todayButton = document.querySelector('.date-button.selected');
-      todayButton?.scrollIntoView({ behavior: 'smooth', inline: 'center' });
     }, 100);
   }
 
@@ -114,24 +150,48 @@ export class ClientSetAppointmentDatePage {
 
   handleSwipe() {
     const deltaX = this.touchEndX - this.touchStartX;
-    const swipeThreshold = 50; // minimum swipe distance in px
+    const swipeThreshold = window.innerWidth * 0.6; // 80% of screen width
   
     if (Math.abs(deltaX) > swipeThreshold) {
       if (deltaX > 0) {
-        // Swipe Right
         this.slideDirection = 'right';
         this.prevMonth();
       } else {
-        // Swipe Left
         this.slideDirection = 'left';
         this.nextMonth();
       }
   
-      // Reset slide direction after animation
       setTimeout(() => {
         this.slideDirection = '';
-      }, 300); // match CSS animation duration
+      }, 300);
     }
+  }
+  
+
+  goToPaymentSelection(){
+    if (this.selectedDate) {
+      localStorage.setItem('selectedDate', JSON.stringify(this.selectedDate));
+    }
+  
+    if (this.selectedSlot) {
+      localStorage.setItem('selectedSlot', this.selectedSlot.time);
+    }
+
+    if (this.selectedDate && this.selectedSlot) {
+      this.navCtrl.navigateForward(['/client-payment-page']);
+    } else {
+      this.toastService.show('Please select a date and time!', {
+        color: 'danger',
+        position: 'bottom',
+        duration: 3000
+      });
+      return
+    }
+  }
+
+
+  prev(){
+    this.navCtrl.navigateBack('/client-lawyer-detail');
   }
 
 }

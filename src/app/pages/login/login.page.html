@@ -1,37 +1,43 @@
 <ion-content class="login-screen ion-padding" [fullscreen]="true">
-
-  <div class="shimmer-wrapper" *ngIf="loading">
-    <div class="shimmer-box"></div>
-  </div>
   <!-- <div class="back-button" (click)="prev()">
     <img src="../../../assets/back-btn.svg" alt="Back" />
   </div> -->
 
-  <div *ngIf="!loading" class="login-container">
-    <h1>Get Started</h1>
-    <p class="welcome-subtitle">Sign in to access your personalized experience</p>
+  <div class="login-container">
+    <img src="assets/logo/logo.svg" alt="App Logo" class="logo" />
+    <h1>Welcome Back</h1>
+    <p class="welcome-subtitle">Access your account in just a few taps.</p>
 
     <form (ngSubmit)="onLogin()" [formGroup]="loginForm" class="login-form">
       <div class="input-group">
-        <label>Email Address</label>
-        <input type="email" formControlName="email" placeholder="Email Address" />
-        <div class="error-text" *ngIf="email.invalid && email.touched">Please enter a valid email.</div>
+        <label>Email <span> *</span></label>
+        <input type="email" formControlName="email" placeholder="Your Email Address" />
+        <div class="error-text" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          Please enter a valid email
+        </div>
       </div>
 
       <div class="input-group password-group">
-        <label>Password</label>
+        <label>Password <span> *</span></label>
         <div class="password-wrapper">
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="********" />
           <img src="assets/icon/Eye.svg" (click)="togglePassword()" alt="Toggle visibility" />
         </div>
-        <div class="error-text" *ngIf="password.invalid && password.touched">Password is required.</div>
+        <div class="error-text" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          Password is required
+        </div>
       </div>
 
       <div class="options">
-        <div class="remember">
-          <ion-checkbox></ion-checkbox>
-          <span>Remember Me</span>
-        </div>
+          <div class="remember">
+            <ion-checkbox
+              formControlName="rememberMe"
+              labelPlacement="end"
+              justify="start"
+            >
+              Remember Me
+            </ion-checkbox>
+          </div>
         <a class="forgot-link">Forgot Password?</a>
       </div>
       
@@ -43,38 +49,23 @@
             expand="block"
             type="submit"
             [disabled]="isSubmitting"
-            (click)="onLogin()"
           >
-            <ng-container *ngIf="!isSubmitting; else loading">
-              Login
-            </ng-container>
-            <ng-template #loading>
-              <span class="spinner spinner-dark spinner-md"></span>
-            </ng-template>
+            <div class="btn-inner">
+              <span *ngIf="!isSubmitting">Login</span>
+              <span *ngIf="isSubmitting" class="spinner spinner-dark spinner-md"></span>
+            </div>
           </button>
         </div>
       </div>
-
-      <!-- <div class="button-group">
-        <div class="selection-buttons">
-          <button class="load-button" expand="block" type="submit" (click)="onLogin()">Login</button>
-        </div>      
-      </div> -->
       
     </form>
 
-    <div class="divider">or continue with</div>
-
-    <div class="social-buttons">
-      <button class="social-btn"><img src="assets/icon/google-icon.svg" />Continue With Google</button>
-    </div>
-
     <p class="signup-text">
       Don’t Have An Account?
-      <a class="signup-link">Sign Up Now</a>
+      <a class="signup-link" href="#" (click)="toRegistration(); $event.preventDefault();">Sign Up Now</a>
       <span class="change-type">
         Go to 
-        <a class="signup-link">Professional Login</a>
+        <a class="signup-link" (click)="toProfessionaLogin()">Professional Login</a>
       </span>
     </p>
   </div>

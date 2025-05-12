@@ -1,29 +1,14 @@
-.stars {
-    display: flex;
-    align-items: center;
-  
-    .star-wrapper {
-      position: relative;
-      width: 20px;
-      height: 20px;
-      margin-right: 2px;
-    }
-  
-    .star-bg, .star-fg {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  
-    .star-fill {
-      overflow: hidden;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
+.star-rating {
+  display: flex;
+  gap: 4px;
+
+  .star {
+    font-size: 1.2rem;
+    color: #d1d5db; // gray
+    transition: color 0.2s;
+
+    &.filled {
+      color: #facc15; // yellow
     }
   }
-  
+}

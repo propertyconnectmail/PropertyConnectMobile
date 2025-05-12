@@ -1,45 +1,42 @@
-<ion-header class="transparent-header" no-shadow>
-  <ion-toolbar>
-    <div class="header-content">
-      <button class="back-button" (click)="goBack()">
-        <img src="assets/icons/back.svg" alt="Back">
-      </button>
-      <h1>Payment</h1>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="payment-content" [fullscreen]="true">
+
+  <div class="edit-profile-container">
+    <div class="header-row">
+      <div class="back-button left" (click)="prev()">
+        <img src="../../../assets/back-btn.svg" alt="Back" />
+      </div>
+      <h1 class="page-title">Select Payment</h1>
+    </div>
+  </div>
+
   <div class="lawyer-card">
-    <img src="assets/images/lawyer.png" alt="Lawyer" class="lawyer-img">
+    <img [src]="lawyer.url" alt="Lawyer" class="lawyer-img">
     <div class="lawyer-info">
-      <h2>Janaka Pererea</h2>
-      <p>Lawyer - Colombo Law College</p>
+      <h2>{{lawyer.firstName + ' '+lawyer.lastName }}</h2>
+      <p>Verified {{lawyer.type}}</p>
       <div class="lawyer-actions">
         <button class="appointment-btn">Get Appointment</button>
-        <div class="price-tag">LKR 3000.00</div>
+        <div class="price-tag">LKR {{lawyer.consultationFee}}</div>
       </div>
     </div>
   </div>
 
   <div class="cards-section">
     <div class="cards-title">
-      <img src="assets/icons/mastercard.svg" alt="Mastercard" class="card-icon">
       <p>Select Card</p>
     </div>
 
     <!-- Card List -->
     <div class="card-list">
-      <ng-container *ngIf="!isLoadingCards; else loadingSkeleton">
         <div 
           class="card-item" 
-          *ngFor="let card of cards; let i = index"
+          *ngFor="let card of paymentCards; let i = index"
           [class.selected]="selectedCardIndex === i"
           (click)="selectCard(i)"
         >
           <div class="card-left">
-            <img src="assets/icons/mastercard.svg" alt="Card" class="card-icon">
-            <p>{{ card.bankName }} <span>{{ card.maskedNumber }}</span></p>
+            <img src="assets/icon/card.svg" alt="Card" class="card-icon">
+            <p><span> * * * * &nbsp; * * * * &nbsp; * * * *  &nbsp;{{ card.last4 }}</span></p>
           </div>
           <div class="card-right">
             <div class="radio">
@@ -47,19 +44,24 @@
             </div>
           </div>
         </div>
-      </ng-container>
-
-      <!-- Shimmer Placeholder -->
-      <ng-template #loadingSkeleton>
-        <div *ngFor="let skel of [1,2,3]" class="card-item shimmer"></div>
-      </ng-template>
     </div>
     
   </div>
 </ion-content>
 
-<ion-footer class="payment-footer">
-  <button class="payment-btn" (click)="proceedToPay()">
-    Payment
-  </button>
-</ion-footer>
+<div class="custom-footer" (click)="createAppointment()">
+  <div class="button-group">
+        <div class="selection-buttons">
+          <button
+            class="load-button"
+            expand="block"
+            type="submit"
+          >
+            <div class="btn-inner">
+              <span *ngIf="!isSubmitting">Create Appointment</span>
+              <span *ngIf="isSubmitting" class="spinner spinner-dark spinner-md"></span>
+            </div>
+          </button>
+        </div>
+      </div>
+</div>

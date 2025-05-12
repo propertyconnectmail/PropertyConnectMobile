@@ -1,12 +1,7 @@
-<div class="stars">
-  <ng-container *ngFor="let index of [0,1,2,3,4]">
-    <div class="star-wrapper">
-      <img src="../../../assets/star-outline.svg" alt="Empty Star" class="star-bg" />
-      <div
-        class="star-fill"
-        [style.width.%]="getStarFill(index)">
-        <img src="../../../assets/star-filled.svg" alt="Filled Star" class="star-fg" />
-      </div>
-    </div>
-  </ng-container>
+ <div class="star-rating">
+      <span
+        *ngFor="let star of stars; let i = index"
+        class="star"
+        [class.filled]="i < rating"
+      >★</span>
 </div>

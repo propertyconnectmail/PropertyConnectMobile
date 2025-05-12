@@ -1,57 +1,105 @@
-<ion-content class="edit-profile-wrapper" [fullscreen]="true">
-  <div class="shimmer-loader" *ngIf="isLoading"></div>
+<ion-content class="edit-profile-wrapper ion-padding" [fullscreen]="true">
+  <div class="edit-profile-container">
 
-  <div class="edit-profile-container" *ngIf="!isLoading">
-    <button class="back-btn" (click)="goBack()">
-      <img src="assets/icons/back.svg" alt="Back" />
-    </button>
-
-    <h1 class="title">Edit Profile</h1>
-
-    <div class="profile-image-wrapper">
-      <img class="profile-image" src="assets/images/profile.jpg" alt="Profile" />
-      <button class="edit-photo-btn">
-        <img src="assets/icons/edit.svg" alt="Edit" />
-      </button>
+    <!-- Header row with back button and title -->
+    <div class="header-row">
+      <div class="back-button" (click)="prev()">
+        <img src="../../../assets/back-btn.svg" alt="Back" />
+      </div>
+      <h1 class="page-title">Edit Profile</h1>
     </div>
 
-    <h2 class="name">Shevon Perera</h2>
-    <button class="change-password-btn">Change Password</button>
-
-    <form class="form-fields">
-      <div class="field-group">
-        <label>First Name</label>
-        <div class="input-with-icon">
-          <input type="text" placeholder="Shevon" />
-          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-image-wrapper">
+        <div class="shimmer-wrapper" *ngIf="isLoadingImage; else imageLoaded">
+          <div class="shimmer-image"></div>
         </div>
+        <ng-template #imageLoaded>
+          <img class="profile-image" [src]="registrationForm.get('url')?.value" alt="Profile" />
+        </ng-template>
+
+        <!-- Hidden File Input -->
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          #fileInput
+          hidden
+          (change)="onImageSelected($event)"
+        />
+
+        <!-- Edit Button -->
+        <button class="edit-photo-btn" (click)="fileInput.click()">
+          <img src="assets/profile/profile-pic-edit.svg" alt="Edit" />
+        </button>
       </div>
 
-      <div class="field-group">
-        <label>Last Name</label>
-        <div class="input-with-icon">
-          <input type="text" placeholder="Perera" />
-          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
-        </div>
+      <!-- Name and Shimmer Placeholder -->
+      <ng-container *ngIf="isLoadingName; else nameLoaded">
+        <div class="shimmer-name"></div>
+      </ng-container>
+      <ng-template #nameLoaded>
+        <h2 class="name">{{ registrationForm.get('firstName')?.value + ' ' + registrationForm.get('lastName')?.value || 'Your Name' }}</h2>
+      </ng-template>
+
+      <!-- Status Display -->
+      <!-- Status Display (only show when loaded) -->
+      <div
+      class="status-label"
+      *ngIf="registrationForm.get('status')?.value"
+      [ngClass]="registrationForm.get('status')?.value === 'active' ? 'active' : 'blocked'">
+      {{ registrationForm.get('status')?.value === 'active' ? 'Active' : 'Blocked' }}
       </div>
 
+
+      <button class="change-password-btn" (click)="changePassword()">Change Password</button>
+    </div>
+
+
+    <!-- Form Fields -->
+    <form [formGroup]="registrationForm" class="form-fields">
       <div class="field-group">
-        <label>Location</label>
-        <div class="input-with-icon">
-          <input type="text" placeholder="Sri Lanka" />
-          <img *ngIf="showCheckmark" src="assets/icons/chevron-down.svg" alt="Dropdown" />
-        </div>
+        <label class="floating-label">Email</label>
+        <input type="email" formControlName="email" />
       </div>
 
-      <div class="field-group">
-        <label>Mobile Number</label>
-        <div class="input-with-icon">
-          <input type="text" placeholder="+94 78-332-5298" />
-          <img *ngIf="showCheckmark" src="assets/icons/check.svg" alt="Check" />
+      <div class="field-group" *ngFor="let field of [
+        { label: 'First Name', name: 'firstName', type: 'text', placeholder: 'Shevon' },
+        { label: 'Last Name', name: 'lastName', type: 'text', placeholder: 'Perera' },
+        { label: 'NIC', name: 'nic', type: 'text', placeholder: '200012312345' },
+        { label: 'Phone', name: 'phone', type: 'text', placeholder: '0771234567' },
+        { label: 'Address', name: 'address', type: 'text', placeholder: 'Colombo, Sri Lanka' },
+        { label: 'Date of Birth', name: 'dob', type: 'date', placeholder: '' }
+      ]">
+        <label class="floating-label">{{ field.label }}</label>
+        <input
+          [type]="field.type"
+          [placeholder]="field.placeholder"
+          [formControlName]="field.name"
+        />
+        <div class="error" *ngIf="f[field.name].touched && f[field.name].invalid">
+          <span *ngIf="f[field.name].errors?.['required']">{{ field.label }} is required</span>
+          <span *ngIf="f[field.name].errors?.['minlength']">{{ field.label }} is too short</span>
+          <span *ngIf="f[field.name].errors?.['pattern']">Invalid {{ field.label }}</span>
         </div>
       </div>
     </form>
 
-    <button class="update-btn">Update Profile</button>
+    <div class="button-group">
+      <div class="selection-buttons">
+        <button
+          class="load-button"
+          expand="block"
+          type="submit"
+          [disabled]="isSubmitting"
+          (click)="updateProfile()"
+        >
+          <div class="btn-inner">
+            <span *ngIf="!isSubmitting">Upadate Profile</span>
+            <span *ngIf="isSubmitting" class="spinner spinner-dark spinner-md"></span>
+          </div>
+        </button>
+      </div>
+    </div>
   </div>
 </ion-content>

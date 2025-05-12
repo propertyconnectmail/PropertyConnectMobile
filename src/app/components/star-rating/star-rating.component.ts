@@ -5,16 +5,16 @@ import { CommonModule } from '@angular/common';
   selector: 'app-star-rating',
   templateUrl: './star-rating.component.html',
   styleUrls: ['./star-rating.component.scss'],
+  imports: [CommonModule]
 })
 export class StarRatingComponent {
 
   @Input() rating: number = 0;
+  stars = Array(5).fill(0);
 
-  getStarFill(index: number): number {
+  getStarFillStyle(index: number): string {
     const fill = this.rating - index;
-    if (fill >= 1) return 100;
-    if (fill > 0) return fill * 100;
-    return 0;
+    const percentage = Math.max(0, Math.min(1, fill)) * 100;
+    return `linear-gradient(to right, #facc15 ${percentage}%, #e5e7eb ${percentage}%)`;
   }
-
 }

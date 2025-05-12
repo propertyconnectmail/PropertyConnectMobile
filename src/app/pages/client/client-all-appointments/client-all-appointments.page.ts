@@ -1,83 +1,97 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton } from '@ionic/angular/standalone';
+import { IonContent} from '@ionic/angular/standalone';
+import { BottomTabComponent } from "../../../components/bottom-tab/bottom-tab.component";
+import { debounceTime, Subject } from 'rxjs';
+import { NavController } from '@ionic/angular';
+import { AppointmentService } from 'src/app/_services/appointment/appointment.service';
 
 @Component({
   selector: 'app-client-all-appointments',
   templateUrl: './client-all-appointments.page.html',
   styleUrls: ['./client-all-appointments.page.scss'],
   standalone: true,
-  imports: [IonButton, IonIcon, IonButtons, IonBackButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent,CommonModule, FormsModule, BottomTabComponent]
 })
 export class ClientAllAppointmentsPage {
 
-  selectedTab: string = 'upcoming'; // default tab
   isLoading = true;
-  skeletonArray = Array(3); // show 3 skeletons
+  skeletonArray = Array(3);
   appointments: any[] = [];
+  filteredAppointments: any[] = [];
 
-  constructor() {}
+  selectedCategory = 'all';
+  searchTerm = '';
+  searchSubject: Subject<string> = new Subject();
+
+  categories = [
+    { label: 'All Appointments', value: 'all' },
+    { label: 'Ongoing', value: 'ongoing' },
+    { label: 'Completed', value: 'completed' }
+  ];
+
+  constructor(private navCtrl: NavController, private appointmentService: AppointmentService) {}
 
   ngOnInit() {
-    setTimeout(() => {
+    const user = JSON.parse(localStorage.getItem('user')!);
+
+    this.appointmentService.getAllClientAppointments({ clientEmail: user.email }).subscribe((res: any) => {
+      this.appointments = res;
       this.isLoading = false;
-      this.appointments = [
-        {
-          image: 'assets/images/doctor1.png',
-          name: 'Dr. Babe Didrikson',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor2.png',
-          name: 'Dr. Joseph Brostito',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor3.png',
-          name: 'Dr. Bessie Coleman',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor3.png',
-          name: 'Dr. Bessie Coleman',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor3.png',
-          name: 'Dr. Bessie Coleman',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor3.png',
-          name: 'Dr. Bessie Coleman',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        },
-        {
-          image: 'assets/images/doctor3.png',
-          name: 'Dr. Bessie Coleman',
-          specialization: 'Dental Specialist',
-          date: 'Sunday, 12 June',
-          time: '11:00 - 12:00 AM',
-        }
-      ];
-    }, 2000); // simulate 2s loading
+      this.filterAppointments();
+    });
+
+    this.searchSubject.pipe(debounceTime(300)).subscribe(() => {
+      this.filterAppointments();
+    });
   }
 
-  selectTab(tab: string) {
-    this.selectedTab = tab;
+  ionViewWillEnter() {
+    const user = JSON.parse(localStorage.getItem('user')!);
+
+    this.appointmentService.getAllClientAppointments({ clientEmail: user.email }).subscribe((res: any) => {
+      this.appointments = res;
+      this.isLoading = false;
+      this.filterAppointments();
+    });
+
+    this.searchSubject.pipe(debounceTime(300)).subscribe(() => {
+      this.filterAppointments();
+    });
   }
 
+  onSearchChange() {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+  selectCategory(category: string) {
+    this.selectedCategory = category;
+    this.filterAppointments();
+  }
+
+  filterAppointments() {
+    let filtered = [...this.appointments];
+
+    if (this.selectedCategory === 'ongoing') {
+      filtered = filtered.filter(app => app.appointmentStatus === 'ongoing');
+    } else if (this.selectedCategory === 'completed') {
+      filtered = filtered.filter(app => app.appointmentStatus === 'completed');
+    }
+
+    if (this.searchTerm.trim()) {
+      filtered = filtered.filter(app =>
+        app.professionalName?.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    this.filteredAppointments = filtered;
+  }
+
+
+  goToAppointment(appointmentId : any){
+    this.navCtrl.navigateForward(['/client-appointment-detail'], {
+      queryParams: { appointmentId }
+    });
+  }
 }

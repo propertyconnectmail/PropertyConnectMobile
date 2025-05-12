@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon } from '@ionic/angular/standalone';
+import { BottomTabComponent } from "../../../components/bottom-tab/bottom-tab.component";
 
 @Component({
   selector: 'app-client-notifications',
   templateUrl: './client-notifications.page.html',
   styleUrls: ['./client-notifications.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BottomTabComponent]
 })
 export class ClientNotificationsPage implements OnInit {
 

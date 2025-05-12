@@ -1,0 +1,32 @@
+<ion-content class="eligibility-wrapper ion-padding" [fullscreen]="true">
+  <div class="eligibility-container">
+    <div class="header-row">
+      <div class="back-button" (click)="prev()">
+        <img src="../../../assets/back-btn.svg" alt="Back" />
+      </div>
+      <h1 class="page-title">Loan Eligibility</h1>
+    </div>
+
+    <div class="form-section">
+      <label>Monthly Income (LKR)</label>
+      <input type="number" [(ngModel)]="monthlyIncome" placeholder="E.g., 150000" />
+
+      <label>Existing EMI (LKR)</label>
+      <input type="number" [(ngModel)]="existingEMI" placeholder="E.g., 15000" />
+
+      <label>Loan Tenure (Years)</label>
+      <input type="number" [(ngModel)]="tenure" placeholder="E.g., 20" />
+
+      <label>Interest Rate (% per annum)</label>
+      <input type="number" [(ngModel)]="interestRate" placeholder="E.g., 14" />
+
+      <button (click)="calculateEligibility()">Check Eligibility</button>
+    </div>
+
+    <div class="result-section" *ngIf="showResults">
+      <h3>You are eligible for:</h3>
+      <p class="amount">LKR {{ eligibleLoan | number }}</p>
+      <p class="emi">Estimated EMI: <strong>LKR {{ calculatedEMI | number }}</strong></p>
+    </div>
+  </div>
+</ion-content>

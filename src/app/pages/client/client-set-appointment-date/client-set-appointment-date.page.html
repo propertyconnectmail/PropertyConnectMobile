@@ -1,44 +1,44 @@
-<ion-header class="custom-header">
-  <ion-toolbar class="toolbar">
-    <ion-buttons slot="start">
-      <ion-back-button icon="assets/icons/back.svg" text="" class="custom-back-button"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Lawyer Detail</ion-title>
-    <ion-buttons slot="end">
-      <ion-button class="favorite-button">
-        <img src="assets/icons/heart.svg" alt="Favorite" />
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true">
 
-<ion-content [fullscreen]="true" class="appointment-content">
+  <div class="edit-profile-container">
+    <div class="header-row">
+      <div class="back-button left" (click)="prev()">
+        <img src="../../../assets/back-btn.svg" alt="Back" />
+      </div>
+      <h1 class="page-title">Set Appointment</h1>
+      <div class="back-button right">
+        <img src="assets/professional/professional-favourites.svg" alt="Favorite" /> 
+      </div>
+    </div>
+  </div>
+
   <div class="profile-section">
-    <img src="assets/images/lawyer-image.jpg" alt="Lawyer" class="lawyer-image" />
+    <img [src]="lawyer.url" alt="Lawyer" class="lawyer-image" />
+
     <div class="stats">
       <div class="stat">
-        <img src="assets/icons/heart.svg" alt="Consults" />
-        <p class="stat-number">150+</p>
-        <p class="stat-label">Consults</p>
+        <img src="assets/professional/professional-heart.svg" alt="Consults" />
+        <span class="stat-number">{{ lawyer.consults }}+</span>
+        <span class="stat-label">Consults</span>
       </div>
       <div class="stat">
-        <img src="assets/icons/crown.svg" alt="Experience" />
-        <p class="stat-number">10 years</p>
-        <p class="stat-label">Experience</p>
+        <img src="assets/professional/professional-crown.svg" alt="Experience" />
+        <span class="stat-number">{{ lawyer.experience }} years</span>
+        <span class="stat-label">Experience</span>
       </div>
       <div class="stat">
-        <img src="assets/icons/star.svg" alt="Rating" />
-        <p class="stat-number">4.9</p>
-        <p class="stat-label">Rating</p>
+        <img src="assets/professional/professional-star.svg" alt="Rating" />
+        <span class="stat-number">{{ lawyer.averageRating }}</span>
+        <span class="stat-label">Rating</span>
       </div>
     </div>
   </div>
 
   <div class="selection-section">
     <div class="month-selector">
-      <button (click)="prevMonth()" [disabled]="isPrevDisabled">&#10094;</button>
+      <button (click)="prevMonth()" style="color: #18A0FB;" [disabled]="isPrevDisabled" >&#10094;</button>
       <span>{{ months[currentMonthIndex] }} {{ selectedYear }}</span>
-      <button (click)="nextMonth()">&#10095;</button>
+      <button (click)="nextMonth()" style="color: #18A0FB;">&#10095;</button>
     </div>
 
     <div *ngIf="isLoadingDates" class="shimmer-placeholder"></div>
@@ -109,8 +109,7 @@
   </div>
 </ion-content>
 
-<ion-footer class="footer">
-  <ion-button expand="block" class="appointment-button">
-    Continue
-  </ion-button>
-</ion-footer>
+<div class="custom-footer" (click)="goToPaymentSelection()">
+  <button class="appointment-button">Continue</button>
+</div>
+

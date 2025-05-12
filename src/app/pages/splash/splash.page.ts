@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-splash',
@@ -11,11 +12,12 @@ import { IonContent } from '@ionic/angular/standalone';
 })
 export class SplashPage implements OnInit {
 
-  constructor() { }
+   constructor(private navCtrl: NavController) {}
 
   ngOnInit(): void {
-    // Optionally, you can navigate to the next page after a delay:
-    // setTimeout(() => { this.router.navigate(['/selection']); }, 2000);
+    setTimeout(() => {
+      this.navCtrl.navigateRoot(['/selection']); // this will be blocked by firstLaunchGuard on later launches
+    }, 2000);
   }
 
 }

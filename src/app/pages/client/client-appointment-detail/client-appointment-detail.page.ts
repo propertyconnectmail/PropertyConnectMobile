@@ -10,6 +10,13 @@ import {
   query,
   stagger
 } from '@angular/animations';
+import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { AppointmentService } from 'src/app/_services/appointment/appointment.service';
+import { ProfessionalService } from 'src/app/_services/professional/professional.service';
+import { ClientService } from 'src/app/_services/client/client.service';
+import { UploadService } from 'src/app/_services/upload/upload.service';
+import { ToastService } from 'src/app/core/_services/toast/toast.service';
 
 @Component({
   selector: 'app-client-appointment-detail',
@@ -45,203 +52,223 @@ import {
       ])
     ])
   ],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, CommonModule, FormsModule]
 })
 export class ClientAppointmentDetailPage implements OnInit {
 
   isLoading: boolean = true;
   hasDocuments: boolean = true;// Toggle this to false to test "no documents uploaded" view
 
+  selectedCategory = 'appointment details';
+
+  selectCategory(categoryValue: string) {
+    this.selectedCategory = categoryValue;
+  }
+
+  categories = [
+    { label: 'Appointment Details', value: 'appointment details' },
+    { label: 'Client Details', value: 'client detail' },
+    { label: 'Professional Details', value: 'lawyer detail' },
+    { label: 'Payment Details', value: 'payment detail' }
+  ];
+
   checklist = [
     { title: 'Contact Lawyer', duration: '3-4 Minutes', icon: 'check-circle.svg' },
-    { title: 'Upload required documents', duration: 'Less than 2 minutes', icon: 'upload.svg' },
-    { title: 'Attend the meeting', duration: '4-5 Minutes', icon: 'calendar.svg' },
-    { title: 'Add a review (optional)', duration: '1-2 Minutes', icon: 'star.svg' }
+    { title: 'Client uploaded required documents', duration: 'Less than 2 minutes', icon: 'upload.svg' },
+    { title: 'Both parties attended the meeting', duration: '4-5 Minutes', icon: 'calendar.svg' },
+    { title: 'Professional uploaded final documents', duration: '1-2 Minutes', icon: 'star.svg' }
   ];
 
   guidelines: string[] = [
-    "Please arrive 15 minutes early, especially if it's your first visit.",
+    "Contact the lawyer and get the necessary details for the appointment",
+    "Please arrive atleast 15 minutes early for the zoom meeting.",
     "Write down any questions for the lawyer and bring them along.",
-    "Bring necessary documents, like ID and insurance details.",
-    "Inform the law office in advance if you need to reschedule."
+    "Have necessary documents ready, like ID and insurance details etc.",
+    "Once the meeting is over and professional has submitted related documents complete the appointment."
   ];
 
   uploadedDocs = [
-    { name: 'Document 1', img: 'assets/images/word-icon.png' },
-    { name: 'Document 2', img: 'assets/images/pdf-icon.png' },
-    { name: 'Document 3', img: 'assets/images/pdf-icon.png' }
+    { name: 'Document 1', img: 'assets/appointment/word-icon.png' },
+    { name: 'Document 2', img: 'assets/appointment/pdf-icon.png' },
+    { name: 'Document 3', img: 'assets/appointment/pdf-icon.png' }
   ];
 
-  constructor() {}
+  appointment: any = {};
+  client: any = {};
+  professional:any = {};
+  isSubmitting = false;
+  appointmentId : any = '';
+
+  constructor(private toastService : ToastService, private uploadService: UploadService, private navCtrl: NavController,private route: ActivatedRoute, private appointmentService : AppointmentService, private professionalService : ProfessionalService, private clientService : ClientService) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1500);
+    this.appointmentId = this.route.snapshot.queryParamMap.get('appointmentId');
+    this.getAppointment();
   }
 
-  onUploadDocuments() {
-    console.log('Upload triggered');
+  async getAppointment(){
+    this.appointmentService.getAppointment({appointmentId : this.appointmentId}).subscribe(async(res:any)=>{
+      console.log(res)
+      this.appointment = res;
+
+      this.professionalService.getProfessionalForm({email : this.appointment.professionalEmail}).subscribe(async(professional:any)=>{
+        this.professional = professional;
+        this.clientService.getClientForm({email : this.appointment.clientEmail}).subscribe(async(client:any)=>{
+          this.client=client;
+          this.isLoading = false;
+        })
+      })
+    })
   }
 
-  openMeetingLink() {
-    window.open('https://zoom.us/24afgjasasd', '_blank');
+  prev(){
+    this.navCtrl.back()
   }
 
+
+  clientDocuments: File[] = [];
+  professionalDocuments: File[] = [];
+
+  handleFileUpload(event: any, userType: 'client' | 'professional') {
+    const files: File[] = Array.from(event.target.files);
+  
+    const validMimeTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+  
+    const invalidFiles = files.filter(file => !validMimeTypes.includes(file.type));
+  
+    if (invalidFiles.length > 0) {
+      alert('Only .pdf, .doc, and .docx files are allowed.');
+      event.target.value = ''; // Clear selection
+      return;
+    }
+  
+    if (userType === 'client') {
+      this.clientDocuments = [...this.clientDocuments, ...files];
+      console.log("Client files selected:", this.clientDocuments);
+    } else {
+      this.professionalDocuments = [...this.professionalDocuments, ...files];
+      console.log("Professional files selected:", this.professionalDocuments);
+    }
+  
+    event.target.value = ''; // Allow re-selection of the same files
+  }
+  
+
+  uploadClientDocuments() {
+    if(this.appointment.clientDocumentsUploaded === false){
+      this.appointment.clientDocumentsUploaded = true;
+    }
+    const formData = new FormData();
+    this.clientDocuments.forEach(file => {
+      formData.append('certifications', file); // 'certifications' must match the Multer field name
+    });
+    this.uploadService.postProfessionalFiles(formData).subscribe(async(files:any)=>{
+      console.log(files);
+      this.appointment.clientDocuments = files.fileUrls;
+      this.clientDocuments = [];
+      this.appointmentService.updateAppointmentClientFiles(this.appointment).subscribe(async(res:any)=>{
+        if (res.message === 'success') {
+            this.toastService.show('Documents uploaded successfully!', {
+              color: 'primary',
+              position: 'bottom',
+              duration: 3000
+            });
+            this.getAppointment();
+          } else {
+            this.toastService.show('Failed to update documents.', {
+              color: 'danger',
+              position: 'bottom',
+              duration: 3000
+            });
+        }
+      })
+    })
+  }
+
+  downloadDocuments(userType: 'client' | 'professional') {
+    const docs = userType === 'client' ? this.appointment.clientDocuments : this.appointment.professionalDocuments;
+    if (docs.length === 0) return;
+
+    const apiUrl = 'https://propertconnectbackend.onrender.com/api/certifications/download-zip';
+    const params = new URLSearchParams();
+    docs.forEach((url: string) => params.append('urls', url));
+
+    const downloadUrl = `${apiUrl}?${params.toString()}`;
+    window.open(downloadUrl, '_blank');
+  }
+
+
+  contactProfessional() {
+    const phone = this.professional?.phone;
+    if (phone) {
+      window.open(`tel:${phone}`, '_system');
+    } else {
+      alert('Phone number not available');
+    }
+  }
+
+  emailProfessional() {
+    if(this.appointment.chatInitiated === false){
+      this.appointment.chatInitiated = true;
+      this.appointmentService.updateAppointment(this.appointment).subscribe(async(res:any)=>{
+        this.getAppointment();
+        console.log(res)
+      })
+    }
+    const email = this.professional?.email;
+    if (email) {
+      const subject = encodeURIComponent('Regarding Appointment');
+      const body = encodeURIComponent('Hi, I have a question regarding our scheduled appointment.');
+      window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_system');
+    } else {
+      alert('Email address not available');
+    }
+  }
+
+  openZoomMeeting() {
+    if(this.appointment.zoomMeetingCompletedClient === false){
+      this.appointment.zoomMeetingCompletedClient = true;
+      this.appointmentService.updateAppointment(this.appointment).subscribe(async(res:any)=>{
+        this.getAppointment();
+        console.log(res)
+      })
+    }
+    const zoomLink = this.appointment?.zoomJoinLink;
+    if (zoomLink) {
+      window.open(zoomLink, '_blank');
+    } else {
+      alert('Zoom meeting link not available');
+    }
+  }
+
+
+  onCompleteAppointment(){
+    this.appointment.appointmentStatus = 'completed';
+    let appointmentId = this.appointment.appointmentId;
+    let professionalEmail = this.appointment.professionalEmail;
+    this.appointmentService.updateAppointment(this.appointment).subscribe(async(res:any)=>{
+    if (res.message === 'success') {
+        this.toastService.show('Appointment completed successfully!', {
+          color: 'primary',
+          position: 'bottom',
+          duration: 3000
+        });
+        this.getAppointment();
+        this.navCtrl.navigateForward(['/client-appointment-review'], {
+          queryParams: { appointmentId , professionalEmail }
+        });
+        return;
+      } else {
+        this.toastService.show('Failed to update appointment status. Try again later!', {
+          color: 'danger',
+          position: 'bottom',
+          duration: 3000
+        });
+      }
+    })
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
-// import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
-// import {
-//   trigger,
-//   transition,
-//   style,
-//   animate,
-//   query,
-//   stagger
-// } from '@angular/animations';
-// import { NavController } from '@ionic/angular';
-
-// @Component({
-//   selector: 'app-client-appointment-detail',
-//   templateUrl: './client-appointment-detail.page.html',
-//   styleUrls: ['./client-appointment-detail.page.scss'],
-//   standalone: true,
-//   animations: [
-//     // Global fade-slide animation for cards
-//     trigger('fadeSlideIn', [
-//       transition(':enter', [
-//         style({ opacity: 0, transform: 'translateY(20px)' }),
-//         animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-//       ])
-//     ]),
-
-//     // Staggered animation for checklist items
-//     trigger('listStagger', [
-//       transition(':enter', [
-//         query(':enter', [
-//           style({ opacity: 0, transform: 'translateY(20px)' }),
-//           stagger('100ms', [
-//             animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-//           ])
-//         ], { optional: true })
-//       ])
-//     ]),
-
-//     // Lawyer image bounce
-//     trigger('bounceIn', [
-//       transition(':enter', [
-//         style({ transform: 'scale(0.8)', opacity: 0 }),
-//         animate('500ms cubic-bezier(0.175, 0.885, 0.32, 1.275)', style({ transform: 'scale(1)', opacity: 1 }))
-//       ])
-//     ])
-//   ],
-//   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
-// })
-// export class ClientAppointmentDetailPage implements OnInit {
-
-//   isLoading = true;
-
-//   actionButtons = [
-//     { icon: 'assets/icons/call.svg', label: 'Call' },
-//     { icon: 'assets/icons/message.svg', label: 'Message' },
-//     { icon: 'assets/icons/schedule.svg', label: 'Schedule' },
-//     { icon: 'assets/icons/detail.svg', label: 'Detail' }
-//   ];
-
-//   appointment = {
-//     status: 'Upcoming',
-//     clientName: 'John Doe',
-//     clientEmail: 'john@example.com',
-//     clientPhone: '+1 234 567 890',
-//     date: '12 Nov, 2024',
-//     time: '09:00 am'
-//   };
-
-//   checklist = [
-//     { icon: 'assets/icons/check.svg', title: 'Contact Lawyer', duration: '2 Minute' },
-//     { icon: 'assets/icons/upload.svg', title: 'Upload required documents', duration: '3 Minute' },
-//     { icon: 'assets/icons/meeting.svg', title: 'Attend the meeting', duration: '30 Minute' },
-//     { icon: 'assets/icons/review.svg', title: 'Add a review (optional)', duration: '1 Minute' }
-//   ];
-
-//   guidelines = [
-//     'Please arrive 15 minutes early, especially if it’s your first visit',
-//     'Write down any questions for the lawyer and bring them along',
-//     'Bring necessary documents, like ID and insurance details',
-//     'Inform in advance if you need to reschedule'
-//   ];
-
-//   documents = [
-//     { name: 'Medical_Report.pdf', icon: 'assets/icons/pdf.svg' },
-//     { name: 'Prescription.docx', icon: 'assets/icons/doc.svg' }
-//   ];
-
-//   constructor(private navCtrl: NavController) {}
-
-//   ngOnInit() {
-//     setTimeout(() => this.isLoading = false, 1000); // simulate loading
-//   }
-
-//   goBack() {
-//     this.navCtrl.back();
-//   }
-
-// }

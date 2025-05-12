@@ -1,100 +1,72 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
+import { BottomTabComponent } from "../../../components/bottom-tab/bottom-tab.component";
+import { NavController } from '@ionic/angular';
+import { ClientService } from 'src/app/_services/client/client.service';
+import { AuthService } from 'src/app/core/_services/auth/auth.service';
+import { ToastService } from 'src/app/core/_services/toast/toast.service';
 
 @Component({
   selector: 'app-client-profile',
   templateUrl: './client-profile.page.html',
   styleUrls: ['./client-profile.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [ IonContent, CommonModule, FormsModule, BottomTabComponent]
 })
-export class ClientProfilePage {
+export class ClientProfilePage implements OnInit {
 
-  loading = true;
+  imageUrl = "";
+  name = "";
+  email = "";
 
-  profileOptions = [
-    { label: 'Edit Profile', icon: 'assets/icons/edit.svg' },
-    { label: 'Favorite', icon: 'assets/icons/heart.svg' },
-    { label: 'Payment', icon: 'assets/icons/payment.svg' },
-    { label: 'Settings', icon: 'assets/icons/settings.svg' },
-    { label: 'Help and Support', icon: 'assets/icons/help.svg' },
-    { label: 'Terms and Conditions', icon: 'assets/icons/terms.svg' },
-  ];
+  constructor(private navCtrl: NavController, private clientService : ClientService, private authService : AuthService, private toastService : ToastService) {}
 
-  constructor() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1500); // Simulate loading
+  ngOnInit(): void {
+    const storedUser : any = localStorage.getItem('user');
+    const user = JSON.parse(storedUser);
+    
+    this.clientService.getClientForm({email : user.email}).subscribe(async(res:any)=>{
+      this.name = res.firstName+ ' '+ res.lastName;
+      this.imageUrl = res.url;
+    })
+
+    this.email = user.email;
   }
 
+  ionViewWillEnter() {
+    const storedUser : any = localStorage.getItem('user');
+    const user = JSON.parse(storedUser);
+    
+    this.clientService.getClientForm({email : user.email}).subscribe(async(res:any)=>{
+      this.name = res.firstName+ ' '+ res.lastName;
+      this.imageUrl = res.url;
+    })
+  }
+
+
+  profileOptions = [
+    { label: 'Edit Profile', icon: 'assets/profile/profile-edit.svg', route: '/client-edit-profile' },
+    { label: 'Favorites', icon: 'assets/profile/profile-favourites.svg', route: '/favorites' },
+    { label: 'Payment Methods', icon: 'assets/profile/profile-payments.svg', route: '/client-payment-methods' },
+    { label: 'Loan Eligibility', icon: 'assets/profile/profile-issues.svg', route: '/client-eligibility' },
+  ];
+
   onOptionClick(item: any) {
-    console.log('Clicked:', item.label);
-    // Navigate based on item.label
+    if (item.route) {
+      this.navCtrl.navigateForward(item.route);
+    }
   }
 
   onLogout() {
-    console.log('Logout clicked');
-    // Implement logout
-  }
+      this.authService.logout();
+      this.toastService.show('Client logged out!', {
+        color: 'primary',
+        position: 'bottom',
+        duration: 3000
+      });
+      this.navCtrl.navigateRoot('/login');
+    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
-// import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon } from '@ionic/angular/standalone';
-
-// @Component({
-//   selector: 'app-client-profile',
-//   templateUrl: './client-profile.page.html',
-//   styleUrls: ['./client-profile.page.scss'],
-//   standalone: true,
-//   imports: [IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
-// })
-// export class ClientProfilePage {
-
-//   isLoading = true;
-
-//   user = {
-//     name: 'Shevon Perera',
-//     phone: '+98-332-32-23',
-//     profileImage: 'assets/images/user-profile.jpg',
-//   };
-
-//   profileItems = [
-//     { label: 'Edit Profile', icon: 'assets/icons/edit.svg', route: '/edit-profile' },
-//     { label: 'Favorite', icon: 'assets/icons/heart.svg', route: '/favorites' },
-//     { label: 'Payment', icon: 'assets/icons/payment.svg', route: '/payment' },
-//     { label: 'Settings', icon: 'assets/icons/settings.svg', route: '/settings' },
-//     { label: 'Help and Support', icon: 'assets/icons/help.svg', route: '/help' },
-//     { label: 'Terms and Conditions', icon: 'assets/icons/shield.svg', route: '/terms' },
-//   ];
-
-//   ngOnInit() {
-//     setTimeout(() => {
-//       this.isLoading = false;
-//     }, 1500); // Simulates shimmer load
-//   }
-
-//   navigateTo(route: string) {
-//     // Add your routing logic here
-//   }
-
-//   logout() {
-//     // Implement logout logic here
-//   }
-
-// }

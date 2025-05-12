@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-selection',
@@ -14,7 +14,7 @@ export class SelectionPage implements OnInit{
 
   isLoading = true;
 
-  constructor(private router: Router) {}
+  constructor(private navCtrl: NavController) {}
 
   ngOnInit() {
     // Simulate shimmer delay
@@ -25,9 +25,9 @@ export class SelectionPage implements OnInit{
 
   selectRole(role: 'client' | 'professional') {
     if (role === 'client') {
-      this.router.navigate(['/onboarding-client']);
+      this.navCtrl.navigateForward('/onboarding-client');
     } else {
-      this.router.navigate(['/onboarding-professional']);
+      this.navCtrl.navigateForward('/onboarding-professional');
     }
   }
 

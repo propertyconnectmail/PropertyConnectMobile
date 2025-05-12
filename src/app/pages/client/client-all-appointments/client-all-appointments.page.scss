@@ -1,59 +1,94 @@
-:host {
-    --background: #F9FAFB;
-    font-family: 'Manrope', sans-serif;
+.browse-consultants {
+  --background: #f9fafb;
+  font-family: 'Manrope', sans-serif;
+
+  .top-section {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f9fafb;
+    padding: 3vw 4vw 3vw 4vw;
   }
-  
-  ion-content {
-    --background: var(--background);
-    scroll-behavior: smooth;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  
-    &::-webkit-scrollbar {
-      display: none;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+
+    h1 {
+      font-size: 5vw;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0;
+      text-align: center;
+      margin-bottom: 5%;
     }
   }
-  
-  .custom-header {
-    ion-toolbar {
-      --background: var(--background);
-      --color: #000;
-    }
-  
-    ion-back-button {
-      color: var(--ion-color-primary);
-      --color: var(--ion-color-primary);
-      font-size: 22px;
-    }
-  }
-  
+
+
   .search-bar {
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #ffffff;
     border-radius: 14px;
     display: flex;
     align-items: center;
-    padding: 0.8rem 1rem;
-    margin-top: 1rem;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  
+    padding: 2.5vw 4vw;
+    margin-bottom: 5vw;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+
     input {
       flex: 1;
       border: none;
-      outline: none;
-      font-size: 1rem;
-      margin-left: 0.8rem;
       background: transparent;
+      font-size: 4vw;
+      outline: none;
       color: #333;
     }
-  
+
     .search-icon {
-      width: 22px;
-      height: 22px;
+      width: 5vw;
+      height: 5vw;
+      margin-right: 2vw;
+    }
+
+    &:focus-within {
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
     }
   }
-  
+
+  .category-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 3vw;
+    padding-bottom: 1vw;
+    margin-bottom: 3vw;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-button {
+      flex: 0 0 auto;
+      padding: 2vw 5vw;
+      border-radius: 50px;
+      border: 2px solid #2196f3;
+      font-size: 3.5vw;
+      font-weight: 400;
+      color: #2196f3;
+      background: transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      &.active,
+      &:active {
+        background: #2196f3;
+        color: #ffffff;
+        border: none;
+      }
+    }
+  }
+
   .category-tabs {
     display: flex;
     overflow-x: auto;
@@ -86,10 +121,10 @@
   }
   
   .appointments-list {
+    padding: 1% 6%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-top: 1rem;
   }
   
   .appointment-card {
@@ -163,7 +198,7 @@
     cursor: pointer;
     transition: transform 0.25s;
   
-    &:hover {
+    &:active {
       transform: scale(1.02);
     }
   }
@@ -201,4 +236,31 @@
       background-position: -100% 0;
     }
   }
+}
+
+
+.empty-state {
+  font-family: 'Manrope', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15vh 8vw;
+  text-align: center;
+  color: #6b7280;
+
+  img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
   
