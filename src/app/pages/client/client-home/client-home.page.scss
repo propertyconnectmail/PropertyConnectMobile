@@ -9,7 +9,7 @@ ion-content {
     scrollbar-width: none; /* Firefox */
 
     .client-home-wrapper{
-      padding: 5% 6%;
+      padding: 10vw 6vw 0vw 6vw;
 
       .header {
         position: relative;
@@ -28,7 +28,7 @@ ion-content {
         .title {
           width: 100%;
           text-align: center;
-          font-size: 6vw;
+          font-size: 7vw;
           font-weight: 800;
 
           .bold {

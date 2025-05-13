@@ -68,11 +68,11 @@ export class ClientHomePage implements OnInit {
   }
 
   toOfficialBrowse(){
-    this.navCtrl.navigateRoot('/client-official-browse')
+    this.navCtrl.navigateForward('/client-official-browse')
   }
 
   toRegistryBrowse(){
-    this.navCtrl.navigateRoot('/client-registry-browse')
+    this.navCtrl.navigateForward('/client-registry-browse')
   }
 
   toRegistryProfile(locationName : any){

@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   apiUrl: 'https://propertconnectbackend.onrender.com/api'
+  // http://localhost:5000/
+  // apiUrl: 'https://propertconnectbackend.onrender.com/api'
 };
 
 /*

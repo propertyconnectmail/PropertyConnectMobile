@@ -5,6 +5,8 @@
       padding: clamp(16px, 5vw, 32px);
       font-family: 'Manrope', sans-serif;
       color: #1f2937;
+      padding-top: 10vw;
+      padding-bottom: 15vw;
   
       .header-row {
         display: flex;
@@ -59,7 +61,7 @@
         margin-top: 20%;
       
         .card-item {
-          background-color: #f7f8fa;
+          background-color: #fff;
           border-radius: 12px;
           padding: 16px 20px;
           display: flex;

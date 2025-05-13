@@ -62,7 +62,7 @@
         <input type="email" formControlName="email" />
       </div>
 
-       <div class="field-group" *ngFor="let field of [
+       <div class="field-group" style="width: 100%;" *ngFor="let field of [
         { label: 'First Name', name: 'firstName', type: 'text', placeholder: 'Shevon' },
         { label: 'Last Name', name: 'lastName', type: 'text', placeholder: 'Perera' },
         { label: 'NIC', name: 'nic', type: 'text', placeholder: '200012312345' },
@@ -97,7 +97,7 @@
           (click)="updateProfile()"
         >
           <div class="btn-inner">
-            <span *ngIf="!isSubmitting">Upadate Profile</span>
+            <span *ngIf="!isSubmitting">Update Profile</span>
             <span *ngIf="isSubmitting" class="spinner spinner-dark spinner-md"></span>
           </div>
         </button>

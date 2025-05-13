@@ -36,6 +36,10 @@ export class AuthService {
       })
     );
   }
+  
+  emailValidation(body : any) {
+    return this.http.post<any>(this.apiUrl + 'mobile/verification', body);
+  }
 
   logout(): void {
     localStorage.removeItem('user');

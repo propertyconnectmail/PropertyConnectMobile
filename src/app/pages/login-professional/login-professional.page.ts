@@ -58,12 +58,15 @@ export class LoginProfessionalPage implements OnInit {
       this.authService.loginProfessional(professional).subscribe(async(res:any) => {
         if(res.email === professional.email){
           this.isSubmitting = false;        
-            this.toastService.show('Login successful!', {
-              color: 'primary',
-              position: 'bottom',
-              duration: 3000
-            });
-          this.navCtrl.navigateRoot(['/professional-home'])
+          this.authService.emailValidation({email: professional.email, firstName : res.firstName}).subscribe(async(emailCode:any)=>{
+            if(emailCode.message === 'success'){
+              this.isSubmitting = false;
+              let Code = emailCode.Code;
+              this.navCtrl.navigateForward(['/email-code'], {
+                queryParams: { Code }
+              });
+            }
+          })
         }
         if(res.Error === 'Email or Password is Incorrect'){
           console.log(res.Error)

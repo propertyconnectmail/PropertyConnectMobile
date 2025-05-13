@@ -28,6 +28,12 @@
 
 @import './theme/helpers';
 
+ion-toast{
+  z-index: 9990 !important;
+  opacity: 1 !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
 
 ion-content {
   --overflow: auto; /* ensures scroll still works */

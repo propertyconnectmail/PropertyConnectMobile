@@ -9,13 +9,11 @@ import { authGuard } from './_guards/auth/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'onboarding-client',
+    redirectTo: 'splash',
     pathMatch: 'full'
   },
   {
-    path: 'splash',
-    loadChildren: () =>
-      import('./pages/splash/splash-routing.module').then((m) => m.splashRoutes)
+    path: 'splash',loadChildren: () => import('./pages/splash/splash-routing.module').then((m) => m.splashRoutes)
   },
   {
     path: 'selection',
@@ -31,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage),canActivate: [authGuard]
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'register',
@@ -164,5 +162,9 @@ export const routes: Routes = [
   {
     path: 'professional-appointment-detail',
     loadComponent: () => import('./pages/professional/professional-appointment-detail/professional-appointment-detail.page').then( m => m.ProfessionalAppointmentDetailPage),canActivate: [professionalGuard]
+  },
+  {
+    path: 'email-code',
+    loadComponent: () => import('./pages/email-code/email-code.page').then( m => m.EmailCodePage)
   }
 ];

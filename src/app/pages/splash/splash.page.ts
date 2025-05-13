@@ -16,8 +16,22 @@ export class SplashPage implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.navCtrl.navigateRoot(['/selection']); // this will be blocked by firstLaunchGuard on later launches
-    }, 2000);
+      const isFirstLaunch = !localStorage.getItem('firstLaunchDone');
+      const user = localStorage.getItem('user');
+
+      if (user) {
+        const parsed = JSON.parse(user);
+        if (parsed.type) {
+          this.navCtrl.navigateRoot('/professional-home');
+        } else {
+          this.navCtrl.navigateRoot('/client-home');
+        }
+      } else if (isFirstLaunch) {
+        this.navCtrl.navigateRoot('/selection');
+      } else {
+        this.navCtrl.navigateRoot('/login');
+      }
+    }, 3000);
   }
 
 }

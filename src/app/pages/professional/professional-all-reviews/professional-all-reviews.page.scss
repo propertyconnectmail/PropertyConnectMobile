@@ -7,7 +7,7 @@
     top: 0;
     z-index: 10;
     background-color: #f9fafb;
-    padding: 3vw 4vw 3vw 4vw;
+    padding: 10vw 4vw 0vw 4vw;
   }
 
   .header {
@@ -38,6 +38,7 @@
 
   .recent-comments {
     margin-top: 5%;
+    padding-bottom: 25vw;
 
     .comments-header {
       display: flex;
@@ -46,7 +47,8 @@
 
       h3 {
         font-size: clamp(16px, 4vw, 20px);
-        font-weight: 500;
+        font-weight: 600;
+        margin-left: 1%;
       }
 
       .see-all {

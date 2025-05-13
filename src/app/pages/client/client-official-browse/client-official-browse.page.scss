@@ -7,7 +7,7 @@
     top: 0;
     z-index: 10;
     background-color: #f9fafb;
-    padding: 3vw 4vw 3vw 4vw;
+    padding: 0vw 4vw 3vw 4vw;
   }
 
 
@@ -22,7 +22,7 @@
         justify-content: center;
         position: relative;
         padding: clamp(16px, 5vw, 32px);
-        padding-top: 10%;
+        padding-top: 13%;
 
         .back-button {
         position: absolute;

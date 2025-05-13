@@ -13,7 +13,7 @@
     <img [src]="lawyer.url" alt="Lawyer" class="lawyer-img">
     <div class="lawyer-info">
       <h2>{{lawyer.firstName + ' '+lawyer.lastName }}</h2>
-      <p>Verified {{lawyer.type}}</p>
+      <p>Verified {{lawyer.type | titlecase}}</p>
       <div class="lawyer-actions">
         <button class="appointment-btn">Get Appointment</button>
         <div class="price-tag">LKR {{lawyer.consultationFee}}</div>

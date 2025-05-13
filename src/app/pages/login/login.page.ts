@@ -56,13 +56,15 @@ export class LoginPage implements OnInit {
       
       this.authService.loginClient(client).subscribe(async(res:any) => {
         if(res.email === client.email){
-          this.isSubmitting = false;        
-            this.toastService.show('Login successful!', {
-              color: 'primary',
-              position: 'bottom',
-              duration: 3000
-            });
-          this.navCtrl.navigateRoot(['/client-home'])
+          this.authService.emailValidation({email: client.email, firstName : res.firstName}).subscribe(async(emailCode:any)=>{
+            if(emailCode.message === 'success'){
+              this.isSubmitting = false;
+              let Code = emailCode.Code;
+              this.navCtrl.navigateForward(['/email-code'], {
+                queryParams: { Code }
+              });
+            }
+          })
         }
         if(res.Error === 'Email or Password is Incorrect'){
           console.log(res.Error)
