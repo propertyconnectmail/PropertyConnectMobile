@@ -52,6 +52,13 @@ ion-content {
       height: clamp(16px, 4vw, 24px);
     }
   }
+
+  ion-toast{
+    z-index: 9990 !important;
+    opacity: 1 !important;
+    display: block !important;
+    pointer-events: auto !important;
+  }
 }
 
 .login-screen {
@@ -418,3 +425,10 @@ h1 {
     transform: scale(1);
   }
 }
+
+ ion-toast{
+    z-index: 9990 !important;
+    opacity: 1 !important;
+    display: block !important;
+    pointer-events: auto !important;
+  }

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonContent, IonCheckbox } from '@ionic/angular/standalone';
 import { AbstractControl, ValidationErrors, Validators, FormGroup, FormBuilder, ValidatorFn } from '@angular/forms';
 import { AuthService } from 'src/app/core/_services/auth/auth.service';
-import { NavController } from '@ionic/angular';
+import { NavController , IonicModule} from '@ionic/angular';
 import { ToastService } from 'src/app/core/_services/toast/toast.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/core/_services/toast/toast.service';
   standalone: true,
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  imports: [IonCheckbox, CommonModule, FormsModule, IonContent, ReactiveFormsModule],
+  imports: [IonCheckbox, CommonModule, FormsModule, IonContent, ReactiveFormsModule, IonicModule],
 })
 export class LoginPage implements OnInit {
   loginForm: FormGroup | any;
