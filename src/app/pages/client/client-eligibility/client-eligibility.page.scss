@@ -66,6 +66,7 @@
         border-radius: 12px;
         font-size: 16px;
         font-weight: 600;
+        cursor: pointer;
       }
     }
 
@@ -76,13 +77,30 @@
       .amount {
         font-size: 24px;
         font-weight: 700;
-        color: #16a34a;
         margin: 8px 0;
       }
 
       .emi {
         font-size: 16px;
         color: #4b5563;
+      }
+
+      .eligible {
+        color: #16a34a;
+      }
+
+      .ineligible {
+        color: #dc2626;
+      }
+
+      .eligible-text {
+        color: #16a34a;
+        font-weight: 600;
+      }
+
+      .ineligible-text {
+        color: #dc2626;
+        font-weight: 600;
       }
     }
   }

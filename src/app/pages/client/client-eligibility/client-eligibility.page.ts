@@ -13,10 +13,13 @@ import { NavController } from '@ionic/angular';
 })
 export class ClientEligibilityPage implements OnInit {
 
+  forcedSaleValue: number = 0;
   monthlyIncome: number = 0;
+  monthlyExpenses: number = 0;
   existingEMI: number = 0;
-  interestRate: number = 14; // default annual interest rate
-  tenure: number = 20; // default in years
+  interestRate: number = 13; // Default annual interest
+  tenure: number = 20;       // Default years
+
   eligibleLoan: number = 0;
   calculatedEMI: number = 0;
   showResults: boolean = false;
@@ -30,16 +33,30 @@ export class ClientEligibilityPage implements OnInit {
   }
 
   calculateEligibility() {
-    const maxEmi = this.monthlyIncome * 0.4 - this.existingEMI;
-    const monthlyInterest = this.interestRate / 12 / 100;
-    const totalMonths = this.tenure * 12;
+  // Step 1: Loan based on Forced Sale Value
+  const loanA = this.forcedSaleValue * 0.75;
 
-    const factor = (Math.pow(1 + monthlyInterest, totalMonths) - 1) / (monthlyInterest * Math.pow(1 + monthlyInterest, totalMonths));
-    const loan = maxEmi * factor;
+  // Step 2: Calculate repayment capacity
+  const netDisposableIncome = this.monthlyIncome - (this.monthlyExpenses + this.existingEMI);
+  const maxEMI = netDisposableIncome * 0.6;
 
-    this.eligibleLoan = Math.round(loan);
-    this.calculatedEMI = Math.round(maxEmi);
-    this.showResults = true;
-  }
+  const r = this.interestRate / 12 / 100; // Monthly interest rate
+  const n = this.tenure * 12; // Total number of months
+
+  // Step 3: Reverse EMI formula to calculate max eligible loan (Loan B)
+  const compoundFactor = Math.pow(1 + r, n);
+  const loanB = maxEMI * ((compoundFactor - 1) / (r * compoundFactor));
+
+  // Step 4: Determine the final eligible loan
+  const eligible = Math.min(loanA, loanB);
+  this.eligibleLoan = eligible > 0 ? Math.round(eligible) : 0;
+
+  // Step 5: Calculate the actual EMI for the eligible loan
+  const actualEMI = this.eligibleLoan * r * compoundFactor / (compoundFactor - 1);
+  this.calculatedEMI = Math.round(actualEMI);
+
+  // Step 6: Show results
+  this.showResults = true;
+} 
 
 }

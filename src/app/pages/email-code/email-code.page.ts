@@ -22,11 +22,14 @@ export class EmailCodePage implements OnInit {
   loading = false;
   isSubmitting = false;
   code : any= '';
+  email : any = '';
 
   constructor( private route: ActivatedRoute ,private fb: FormBuilder, private navCtrl: NavController, private clientService : ClientService, private platformService : PlatformService, private toastService : ToastService) {}
 
   ngOnInit() {
     this.code = this.route.snapshot.queryParamMap.get('Code');
+    this.email = this.route.snapshot.queryParamMap.get('email');
+    console.log(this.email)
     console.log(this.code+" is the code")
     this.validationForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(6),Validators.maxLength(6)]]
@@ -63,12 +66,14 @@ export class EmailCodePage implements OnInit {
               this.navCtrl.navigateRoot(['/client-home']);
             }
           }
+          return;
         }else{
           this.toastService.show('Incorrect validation code please try again!', {
               color: 'danger',
               position: 'bottom',
               duration: 3000
           });
+          return
         }
     }
   }

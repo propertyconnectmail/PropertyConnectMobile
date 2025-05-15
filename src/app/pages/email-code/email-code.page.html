@@ -12,7 +12,7 @@
     <form (ngSubmit)="onValidation()" [formGroup]="validationForm" class="login-form">
       <div class="input-group">
         <label>Email Code <span> *</span></label>
-        <input type="number" formControlName="code" placeholder="Your First Name" />
+        <input type="number" formControlName="code" placeholder="Enter you verification code" />
         <div class="error-text" *ngIf="validationForm.get('code')?.invalid && validationForm.get('code')?.touched">
           Email code should be 6 digits
         </div>

@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/core/_services/toast/toast.service';
   standalone: true,
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  imports: [IonCheckbox, CommonModule, FormsModule, IonContent, ReactiveFormsModule, IonicModule],
+  imports: [IonCheckbox, CommonModule, FormsModule, IonContent, ReactiveFormsModule],
 })
 export class LoginPage implements OnInit {
   loginForm: FormGroup | any;
@@ -61,7 +61,7 @@ export class LoginPage implements OnInit {
               this.isSubmitting = false;
               let Code = emailCode.Code;
               this.navCtrl.navigateForward(['/email-code'], {
-                queryParams: { Code }
+                queryParams: { Code, email : client.email }
               });
             }
           })

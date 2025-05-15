@@ -63,6 +63,9 @@
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="********" />
           <img src="assets/icon/Eye.svg" (click)="togglePassword()" alt="Toggle visibility" />
         </div>
+        <div class="error-text" *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
+          Password should be atleast 6 characters
+        </div>
       </div>
 
       <!-- Confirm Password -->
@@ -71,6 +74,9 @@
         <div class="password-wrapper">
           <input [type]="showPassword ? 'text' : 'password'" formControlName="retypePassword" placeholder="********" />
           <img src="assets/icon/Eye.svg" (click)="togglePassword()" alt="Toggle visibility" />
+        </div>
+        <div class="error-text" *ngIf="registrationForm.get('retypePassword')?.invalid && registrationForm.get('retypePassword')?.touched">
+          Password should be atleast 6 characters and matching the password field
         </div>
       </div>
 
@@ -83,6 +89,9 @@
           <option value="valuer">Valuer</option>
           <option value="surveyor">Surveyor</option>
         </select>
+        <div class="error-text" *ngIf="registrationForm.get('type')?.invalid && registrationForm.get('type')?.touched">
+          Please select a professional type
+        </div>
       </div>
 
       <!-- Certifications Upload -->

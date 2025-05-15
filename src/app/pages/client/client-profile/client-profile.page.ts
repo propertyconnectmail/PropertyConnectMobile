@@ -50,7 +50,7 @@ export class ClientProfilePage implements OnInit {
     { label: 'Edit Profile', icon: 'assets/profile/profile-edit.svg', route: '/client-edit-profile' },
     { label: 'Favorites', icon: 'assets/profile/profile-favourites.svg', route: '/favorites' },
     { label: 'Payment Methods', icon: 'assets/profile/profile-payments.svg', route: '/client-payment-methods' },
-    { label: 'Loan Eligibility', icon: 'assets/profile/profile-issues.svg', route: '/client-eligibility' },
+    { label: 'Loan Eligibility Checker', icon: 'assets/profile/profile-issues.svg', route: '/client-eligibility' },
   ];
 
   onOptionClick(item: any) {
